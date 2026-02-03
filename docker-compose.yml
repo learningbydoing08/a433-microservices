@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  order-service:
+    image: kiwkiwramadan/order-service:latest
+    ports:
+      - "3000:3000"
+    environment:
+      AMQP_URL: amqp://rabbitmq:5672
+    depends_on:
+      - rabbitmq
+
+  shipping-service:
+    image: kiwkiwramadan/shipping-service:latest
+    ports:
+      - "3001:3001"
+    environment:
+      AMQP_URL: amqp://rabbitmq:5672
+    depends_on:
+      - rabbitmq
+
